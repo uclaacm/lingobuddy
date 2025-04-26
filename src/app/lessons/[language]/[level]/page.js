@@ -4,6 +4,11 @@ import { useParams } from 'next/navigation';
 import '../../../learnpage.css';;
 
 export default function LearnPage() {
+
+  if (typeof window !== 'undefined' && sessionStorage.getItem("email") === null) {
+    redirect("/login");
+  }
+
   const params = useParams();
   const { language, level } = params;
 
