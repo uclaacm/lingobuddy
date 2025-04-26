@@ -1,23 +1,39 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI, createUserContent, createPartfromUri } from '@google/generative-ai';
 
 // Initialize the Gemini API
 const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
 
 function extractJSON(text) {
-  // Remove markdown code block wrappers and trim
   return text.replace(/```json|```/g, '').trim();
 }
 
-export async function generateChineseLesson(level, topic) {
+export async function chat(message) {
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const prompt = message;
+    try {
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        let text = response.text();
+        text = text.replace(/```(?:json)?|```/g, '').trim();
+        return text;
+    } catch (error) {
+        console.error('Error chatting with Gemini:', error);
+        throw error;
+    }
+}
+
+export async function generateLesson(language, level, topic) {
   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-  const prompt = `Generate a Chinese language lesson for ${level} level students about ${topic}. 
+  const prompt = `Generate a ${language} language lesson for ${level} level students about ${topic}. 
   Include:
-  1. Key vocabulary (with pinyin and English translation)
-  2. Example sentences (with pinyin and English translation)
+  1. Key vocabulary (with pronunciation and English translation)
+  2. Example sentences (with pronunciation and English translation)
   3. Cultural notes or tips
   4. Practice exercises
-  \nFormat the response in JSON with the following structure:\n{\n  "title": "string",\n  "vocabulary": [{"chinese": "string", "pinyin": "string", "english": "string"}],\n  "sentences": [{"chinese": "string", "pinyin": "string", "english": "string"}],\n  "culturalNotes": ["string"],\n  "exercises": ["string"]\n}`;
+  \nFormat the response in JSON with the following structure:\n{\n  "title": "string",\n  "vocabulary": 
+  [{"${language}": "string", "pronounciation": "string", "english": "string"}],\n  "sentences": 
+  [{"${language}": "string", "pronounciation": "string", "english": "string"}],\n  "culturalNotes": ["string"],\n  "exercises": ["string"]\n}`;
 
   try {
     const result = await model.generateContent(prompt);
@@ -31,10 +47,10 @@ export async function generateChineseLesson(level, topic) {
   }
 }
 
-export async function getLessonSuggestions(level) {
+export async function getLessonSuggestions(language, level) {
   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-  const prompt = `Suggest 5 interesting topics for Chinese language lessons at ${level} level. \nReturn the response as a JSON array of strings.`;
+  const prompt = `Suggest 5 interesting topics for ${language} language lessons at ${level} level. \nReturn the response as a JSON array of strings.`;
 
   try {
     const result = await model.generateContent(prompt);
