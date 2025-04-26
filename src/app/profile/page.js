@@ -69,7 +69,7 @@ export default function Profile() {
         <div className="language-selection">
           {languages.map((language) => (
             <button
-              key={language.name}
+              key={language}
               onClick={() => setSelectedLanguage(language)}
               className={`language-button ${selectedLanguage === language ? "selected" : ""}`}
             >
