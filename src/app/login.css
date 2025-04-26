@@ -7,10 +7,18 @@
 }
 
 .header {
-    font-size: 2rem;
-    margin-bottom: 20px;
+    font-size: 2.5rem;
+    margin-bottom: 5px;
     font-weight: bolder;
     color: #4d8c9d;
+    font-family: 'Cal Sans', sans-serif;
+}
+
+.sub-header {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #4d8c9d;
+    font-family: 'Cal Sans', sans-serif;
 }
 
 
