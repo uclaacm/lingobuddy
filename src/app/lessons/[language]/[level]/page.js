@@ -2,13 +2,9 @@
 
 import { useParams } from 'next/navigation';
 import '../../../learnpage.css';
-import './lesson-dynamic.css';
+import './lesson.css';
 import { useEffect, useState } from 'react';
-import {
-  generateLesson,
-  getLessonSuggestions,
-  chat as chatGemini
-} from '@/lib/gemini';
+import { generateLesson, getLessonSuggestions, chat as chatGemini } from '@/lib/gemini';
 
 export default function LearnPage() {
   const params = useParams();
@@ -23,12 +19,12 @@ export default function LearnPage() {
 
   // Load lesson suggestions and first lesson
   useEffect(() => {
-    async function loadLesson() {
-      setLoading(true);
+    async function loadLesson() {      setLoading(true);
       setError(null);
       try {
         const topics = await getLessonSuggestions(language, level);
-        const lesson = await generateLesson(language, level, 'Greetings');
+        setSuggestions(topics);
+        const lesson = await generateLesson(language, level, suggestions);
         setLesson(lesson);
       } catch (err) {
         setError('Failed to load lesson');
