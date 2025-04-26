@@ -1,3 +1,11 @@
-node_modules
-.next/
-.env.local
+# Node
+frontend/node_modules/
+
+# Python
+backend/venv/
+backend/__pycache__/
+
+# Environment files
+frontend/.env.local
+backend/.env
+google-key.json
