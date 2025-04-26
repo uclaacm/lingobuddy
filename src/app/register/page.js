@@ -5,7 +5,7 @@ import Image from "next/image";
 import {useState} from "react";
 import {redirect} from "next/navigation";
 import { supabase } from '../../../lib/supabaseClient';
-import '../login.css';
+import '../homepage.css';
 
 
 export default function Register() {

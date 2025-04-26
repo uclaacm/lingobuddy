@@ -9,13 +9,10 @@ export default function Home() {
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [firstLine, setFirstLine] = useState(""); // State for the first line
-  const [secondLine, setSecondLine] = useState(""); // State for the second line
 
   useEffect(() => {
-    const firstText = "Weelcome to LingoBuddy 🌍";
-    const secondText = "–  Your AI-Powered Language Learner";
+    const firstText = "Piick a language and level to get started";
     let firstIndex = 0;
-    let secondIndex = 0;
 
     // Typing effect for the first line
     const typeFirstLine = () => {
@@ -23,9 +20,6 @@ export default function Home() {
         setFirstLine((prev) => prev + firstText.charAt(firstIndex));
         firstIndex++;
         setTimeout(typeFirstLine, 60); // Adjust typing speed here
-      } else {
-        // Start typing the second line after the first line is complete
-        setTimeout(typeSecondLine, 500); // Delay before starting the second line
       }
     };
 
@@ -44,10 +38,8 @@ export default function Home() {
   const languages = [
     { name: "Spanish", flag: "🇪🇸" },
     { name: "French", flag: "🇫🇷" },
-    { name: "Italian", flag: "🇮🇹" },
     { name: "Norwegian", flag: "🇳🇴" },
     { name: "Mandarin", flag: "🇨🇳" },
-    { name: "Cantonese", flag: "🇭🇰" }
   ]
 
   const levels = ["Basic", "Intermediate", "Advanced"];
@@ -59,11 +51,10 @@ export default function Home() {
     router.push(`lessons/${languageSlug}/${levelSlug}`);
   }
   return (
-    <div className="container">
+    <div className="container-homepage">
       <div className="middle-section">
-        <div className="title">
+        <div className="title-homepage">
           <h1>{firstLine}</h1>
-          <h1>{secondLine}</h1>
         </div>
 
 
