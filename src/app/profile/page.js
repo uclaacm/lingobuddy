@@ -14,7 +14,7 @@ export default function Profile() {
     
     useEffect(() => {
         const fetchProfileData = async () => {
-            let email = JSON.parse(sessionStorage.getItem("email"));
+            let email = sessionStorage.getItem("email");
             const { data, error } = await  supabase
                 .from('profiles')
                 .select('username, language_1, language_2, language_3')
