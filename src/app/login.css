@@ -1,0 +1,48 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.header {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    font-weight: bolder;
+    color: #4d8c9d;
+}
+
+
+.login-container {
+    background-color: #193c4d;
+    padding: 25px;
+    border-radius: 5px;
+}
+
+.login-header {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.login-submit {
+    background-color: #4d8c9d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.login-submit:hover {
+    background-color: #3b6a7a;
+}
+
+.create-account {
+    margin-top: 20px;
+    color: white;
+    text-decoration: none;
+}
+.create-account:hover {
+    text-decoration: underline;
+}
