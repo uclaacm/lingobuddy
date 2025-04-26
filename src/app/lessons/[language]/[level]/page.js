@@ -16,15 +16,19 @@ export default function LearnPage() {
   const [chatInput, setChatInput] = useState('');
   const [chatResponse, setChatResponse] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
+  const [selectedTopic, setSelectedTopic] = useState('');
 
   // Load lesson suggestions and first lesson
   useEffect(() => {
-    async function loadLesson() {      setLoading(true);
+    async function loadLesson() {
+      setLoading(true);
       setError(null);
       try {
         const topics = await getLessonSuggestions(language, level);
         setSuggestions(topics);
-        const lesson = await generateLesson(language, level, suggestions);
+        let topic = topics && topics.length > 0 ? topics[0] : 'Greetings';
+        setSelectedTopic(topic);
+        const lesson = await generateLesson(language, level, topic);
         setLesson(lesson);
       } catch (err) {
         setError('Failed to load lesson');
@@ -35,6 +39,20 @@ export default function LearnPage() {
     loadLesson();
   }, [language, level]);
 
+  // Handle topic selection
+  const handleTopicSelect = async (topic) => {
+    setSelectedTopic(topic);
+    setLoading(true);
+    try {
+      const lesson = await generateLesson(language, level, topic);
+      setLesson(lesson);
+    } catch {
+      setError('Failed to load lesson');
+    }
+    setLoading(false);
+  };
+
+  // Chat handler
   const handleChatSend = async (e) => {
     e.preventDefault();
     if (!chatInput.trim()) return;
@@ -68,6 +86,24 @@ export default function LearnPage() {
           {chatResponse && <div><b>Gemini:</b> {chatResponse}</div>}
         </div>
       </div>
+      {/* Topic suggestions */}
+      {suggestions.length > 0 && (
+        <div className="topic-selector">
+          <h2>Choose a Topic</h2>
+          <div className="topic-buttons">
+            {suggestions.map((topic, index) => (
+              <button
+                key={index}
+                onClick={() => handleTopicSelect(topic)}
+                className={`topic-button${selectedTopic === topic ? ' selected' : ''}`}
+                style={{ margin: '0 8px 8px 0', padding: '8px 16px', borderRadius: '5px', border: '1px solid #3498db', background: selectedTopic === topic ? '#3498db' : '#fff', color: selectedTopic === topic ? '#fff' : '#3498db', cursor: 'pointer' }}
+              >
+                {topic}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       {/* Lesson content */}
       {loading ? (
         <div className='loading'>Loading lesson...</div>
