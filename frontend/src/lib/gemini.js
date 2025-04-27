@@ -2,9 +2,9 @@ import { GoogleGenerativeAI, createUserContent, createPartfromUri } from '@googl
 
 const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
 
-// function extractJSON(text) {
-//   return text.replace(/```json|```/g, '').trim();
-// }
+function extractJSON(text) {
+  return text.replace(/```json|```/g, '').trim();
+}
 
 // export function extractJSON(text) {
 //   const match = text.match(/{[\s\S]*}/);  // Look for curly braces to find the object
@@ -14,13 +14,13 @@ const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
 //   throw new Error("No JSON object found in the response text");
 // }
 
-export function extractJSON(text) {
-  const match = text.match(/\[[\s\S]*?\]/);  // Match the first JSON array in the text
-  if (match) {
-    return match[0];
-  }
-  throw new Error("No JSON array found in the response text");
-}
+// export function extractJSON(text) {
+//   const match = text.match(/\[[\s\S]*?\]/);  // Match the first JSON array in the text
+//   if (match) {
+//     return match[0];
+//   }
+//   throw new Error("No JSON array found in the response text");
+// }
 
 
 
@@ -92,12 +92,7 @@ export async function generateLesson(language, level, topic) {
 export async function getLessonSuggestions(language, level) {
   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-  const prompt = `
-Suggest 6 real-world topics (2-4 words each) for ${language} language lessons at ${level} level.
-ONLY return a JSON array like this:
-["Travel", "Food and Dining", "Cultural Traditions", "Weather and Seasons", "Daily Routines", "Work and Careers"]
-DO NOT add any explanations or formatting — ONLY the raw JSON array.
-`;
+  const prompt = `Suggest 6 real-world topics (2-4 words each) for ${language} language lessons at ${level} level. ONLY return a JSON array like this: ["Travel", "Food and Dining", "Cultural Traditions", "Weather and Seasons", "Daily Routines", "Work and Careers"] DO NOT add any explanations or formatting — ONLY the raw JSON array.`;
 
   try {
     const result = await model.generateContent(prompt);
