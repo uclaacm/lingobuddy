@@ -1,4 +1,3 @@
-// middleware.js
 import { NextResponse } from 'next/server';
 import { parse } from 'cookie';
 
@@ -6,7 +5,6 @@ export function middleware(req) {
   const cookies = parse(req.headers.get('cookie') || '');
   const token = cookies['sb-access-token'];
 
-  // List of routes that require auth
   const protectedRoutes = ['/', '/lessons', '/profile'];
 
   const url = req.nextUrl.pathname;
@@ -20,7 +18,6 @@ export function middleware(req) {
   return NextResponse.next();
 }
 
-// Protect multiple routes
 export const config = {
   matcher: ['/:path*', '/lessons/:path*', '/profile/:path*'],
 };

@@ -37,7 +37,7 @@ export default function LearnPage() {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (SpeechRecognition) {
         const recognitionInstance = new SpeechRecognition();
-        recognitionInstance.lang = 'en-US'; // or set dynamically based on your app's language
+        recognitionInstance.lang = 'en-US';
         recognitionInstance.interimResults = false;
         recognitionInstance.maxAlternatives = 1;
         setRecognition(recognitionInstance);
@@ -125,7 +125,6 @@ export default function LearnPage() {
       setError(null);
       try {
         const prompt = 'Suggest 6 real worlds topics (2-4 words each) for ${language} language lessons at ${level} level. Only return a JSON array of short topic names, no descriptions, with english definitions next to it preceded by a colon';
-        // const prompt = `Suggest 6 real worlds topics (2-4 words each) for ${language} language lessons at ${level} level. Only return a JSON array of short topic names, no descriptions, with english definitions next to it preceded by a colon`;
         const topics = await getLessonSuggestions(language, level);
         setSuggestions(topics);
       } catch (err) {
@@ -170,7 +169,6 @@ export default function LearnPage() {
         }
       }>Profile</button>
       <RotatingButton onMicClick={handleSpeechRecognition} />
-      {/* Simple Chat UI */}
       <div style={{ maxWidth: 700, margin: '2rem auto' }}>
         <h2>Chat with Lingo</h2>
         <form onSubmit={handleChatSend} style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
@@ -269,31 +267,6 @@ export default function LearnPage() {
             </div>
           </section>
 
-          {/* <section className='vocabulary-section'>
-            <h3>Vocabulary</h3>
-            <div className='vocabulary-grid'>
-              {lesson.vocabulary.map((item, index) => (
-                <div key={index} className='vocabulary-card'>
-                  <div>
-                    {item.chinese || item.spanish || item.french || item.italian || item.norwegian || item.cantonese}
-                    <button
-                      onClick={() => {
-                        setSpeakingIndex(index);
-                        handleSpeak(item.chinese || item.spanish || item.french || item.italian || item.norwegian || item.cantonese)
-                          .finally(() => setSpeakingIndex(null));
-                      }}
-                      disabled={speakingIndex == index}
-                      style={{ marginLeft: '8px' }}
-                    >
-                      {speakingIndex === index ? "🔄 Loading Lingo..." : "🔊"}
-                    </button>
-                  </div>
-                  <div>{item.pinyin || item.pronunciation || ''}</div>
-                  <div>{item.english}</div>
-                </div>
-              ))}
-            </div>
-          </section> */}
           <section className='sentences-section'>
             <h3>Example Sentences</h3>
             {Array.isArray(lesson.sentences) && lesson.sentences.length > 0 ? (
@@ -322,29 +295,6 @@ export default function LearnPage() {
             )}
           </section>
 
-          {/* <section className='sentences-section'>
-            <h3>Example Sentences</h3>
-            {lesson.sentences.map((sentence, index) => (
-              <div key={index} className='sentence-card'>
-                <div>
-                  {sentence.chinese || sentence.spanish || sentence.french || sentence.italian || sentence.norwegian || sentence.cantonese}
-                  <button
-                    onClick={() => {
-                      setSpeakingIndex(index);
-                      handleSpeak(sentence.chinese || sentence.spanish || sentence.french || sentence.italian || sentence.norwegian || sentence.cantonese)
-                        .finally(() => setSpeakingIndex(null));
-                    }}
-                    disabled={speakingIndex == index}
-                    style={{ marginLeft: '8px' }}
-                  >
-                    {speakingIndex === index ? "🔄 Loading Lingo..." : "🔊"}
-                  </button>
-                </div>
-                <div>{sentence.pinyin || sentence.pronunciation || ''}</div>
-                <div>{sentence.english}</div>
-              </div>
-            ))}
-          </section> */}
           <section className='cultural-notes'>
             <h3>Cultural Notes</h3>
             <ul>
@@ -358,14 +308,6 @@ export default function LearnPage() {
             </ul>
           </section>
 
-          {/* <section className='cultural-notes'>
-            <h3>Cultural Notes</h3>
-            <ul>
-              {lesson.culturalNotes.map((note, index) => (
-                <li key={index}>{note}</li>
-              ))}
-            </ul>
-          </section> */}
           <section className='exercises'>
             <h3>Practice Exercises</h3>
             <ol>
@@ -379,14 +321,6 @@ export default function LearnPage() {
             </ol>
           </section>
 
-          {/* <section className='exercises'>
-            <h3>Practice Exercises</h3>
-            <ol>
-              {lesson.exercises.map((exercise, index) => (
-                <li key={index}>{exercise}</li>
-              ))}
-            </ol>
-          </section> */}
         </div>
       ) : null}
     </div>

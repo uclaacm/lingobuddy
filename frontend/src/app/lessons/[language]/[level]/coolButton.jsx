@@ -8,7 +8,7 @@ export default function RotatingButton({ onMicClick }) {
   const handleClick = () => {
     setIsPulsing(!isPulsing);
     if (onMicClick) {
-      onMicClick(); // ✅ Call the speech recognition function passed from page.js!
+      onMicClick();
     }
   };
 

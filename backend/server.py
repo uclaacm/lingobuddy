@@ -10,19 +10,17 @@ AudioSegment.converter = which("ffmpeg")
 
 app = FastAPI()
 
-# ✅ Allow CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust this for production!
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ✅ PCM-to-WAV conversion
 def pcm_to_wav(pcm_data, sample_rate=24000):
     audio_segment = AudioSegment(
         data=pcm_data,
-        sample_width=2,            # 16-bit = 2 bytes
+        sample_width=2,
         frame_rate=sample_rate,
         channels=1
     )
@@ -32,7 +30,6 @@ def pcm_to_wav(pcm_data, sample_rate=24000):
     wav_buffer.seek(0)
     return wav_buffer
 
-# ✅ Main route: takes text, returns spoken WAV audio
 @app.post("/speak")
 async def speak(request: Request):
     data = await request.json()

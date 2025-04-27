@@ -36,7 +36,6 @@ export default function Login() {
                     alert("Please confirm your email address.");
                 }
                 else if (error.message === "NEXT_REDIRECT"){
-                    // if authenticated and if user has selected a language, redirect to profile page
                     sessionStorage.setItem("email", data.email);
                     redirect("/profile");
                 }
@@ -56,8 +55,6 @@ export default function Login() {
         const data = Object.fromEntries(formData.entries());
         console.log(data);
         if (data.username !== "" && data.password !== "" && data["confirm-password"] !== "" && data.email !== "") {
-            // put registration logic here
-            // for now, just redirect to login page
             if (data.password !== data["confirm-password"]) {
                 alert("Passwords do not match.");
             }
@@ -124,13 +121,12 @@ export default function Login() {
     <div className="container-login">
       <div className="middle-section-login">
         <div className="title">
-          {/* First Typewriter */}
           <Typewriter
             options={{
               autoStart: true,
-              loop: false, // Ensure it runs only once
-              delay: 60, // Adjust typing speed here
-              cursor: "", // Remove cursor after typing
+              loop: false,
+              delay: 60,
+              cursor: "",
             }}
             onInit={(typewriter) => {
               typewriter
@@ -139,15 +135,13 @@ export default function Login() {
                 .start();
             }}
           />
-
-          {/* Second Typewriter */}
           {showSecondTypewriter && (
             <Typewriter
               options={{
                 autoStart: true,
-                loop: false, // Ensure it runs only once
-                delay: 60, // Adjust typing speed here
-                cursor: "", // Remove cursor after typing
+                loop: false,
+                delay: 60,
+                cursor: "",
               }}
               onInit={(typewriter) => {
                 typewriter.typeString("–  Your AI-Powered Language Learner").start();

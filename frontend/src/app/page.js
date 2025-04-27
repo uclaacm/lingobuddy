@@ -53,7 +53,7 @@ export default function Home() {
                 strings: ["Pick a language and level to get started"],
                 autoStart: true,
                 loop: true,
-                delay: 60, // Adjust typing speed here
+                delay: 60,
                 pauseFor: 999999999,
                 cursor: ""
               }}

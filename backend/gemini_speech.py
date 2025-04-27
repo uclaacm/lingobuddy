@@ -5,7 +5,6 @@ from google import genai
 from google.genai import types
 import numpy as np
 
-# Load your .env file
 load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 
@@ -39,14 +38,12 @@ CONFIG = types.LiveConnectConfig(
     )
 )
 
-# ✅ Conversion function (handles float32 → int16)
 def convert_float32_to_int16(pcm_bytes):
     float_data = np.frombuffer(pcm_bytes, dtype=np.float32)
     int16_data = np.clip(float_data, -1.0, 1.0)
     int16_data = (int16_data * 32767).astype(np.int16)
     return int16_data.tobytes()
 
-# ✅ Gemini speech generator
 async def speak_text(text):
     audio_chunks = []
 
@@ -62,6 +59,5 @@ async def speak_text(text):
     print(f"[DEBUG] Combined audio length: {len(combined_audio)} bytes")
     print(f"[DEBUG] First 20 bytes: {combined_audio[:20]}")
 
-    # ✅ No conversion needed — Gemini sends int16 PCM!
     return combined_audio
 
