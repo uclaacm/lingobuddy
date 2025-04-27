@@ -25,6 +25,8 @@ LingoBuddy is an AI-powered tool for learning new languages. It provides a platf
 - Supabase
 
 ## Setup Instructions
+*Make sure you have Python 3.12 or earlier installed*
+
 1. Clone this GitHub repository
 ```
 git clone https://github.com/sebomaniac/lingobuddy.git
@@ -40,7 +42,7 @@ cd lingobuddy
 npm install
 ```
 
-4. Add your keys to database and Gemini API
+4. Add your keys for the database and Gemini API
 ```
 // frontend/.env.local
 NEXT_PUBLIC_SUPABASE_URL = 
