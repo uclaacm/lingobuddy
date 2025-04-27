@@ -200,3 +200,11 @@
   color: #0f2029;
   padding-bottom: 0.1vh;
 }
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 2rem;
+}

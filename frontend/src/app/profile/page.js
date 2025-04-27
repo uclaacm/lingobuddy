@@ -57,7 +57,7 @@ export default function Profile() {
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div className="loading">Loading...</div>;
     }
 
     console.log("Languages: ", languages);
