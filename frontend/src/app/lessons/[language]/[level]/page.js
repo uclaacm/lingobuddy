@@ -8,6 +8,11 @@ import { generateLesson, getLessonSuggestions, chat as chatGemini } from '@/lib/
 import RotatingButton from '@/app/lessons/[language]/[level]/coolButton';
 
 export default function LearnPage() {
+
+  if (typeof window !== 'undefined' && sessionStorage.getItem("email") === null) {
+    redirect("/login");
+  }
+
   const params = useParams();
   const { language, level } = params;
   const [lesson, setLesson] = useState(null);
