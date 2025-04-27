@@ -5,7 +5,7 @@ import Image from "next/image";
 import {useState, useEffect} from "react";
 import {redirect} from "next/navigation";
 import { supabase } from '../../../lib/supabaseClient';
-import '../homepage.css';
+import '../styles.css';
 import Typewriter from 'typewriter-effect';
 
 
@@ -122,7 +122,7 @@ export default function Login() {
 
   return (
     <div className="container-login">
-      <div className="middle-section">
+      <div className="middle-section-login">
         <div className="title">
           {/* First Typewriter */}
           <Typewriter
