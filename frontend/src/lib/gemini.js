@@ -6,6 +6,24 @@ function extractJSON(text) {
   return text.replace(/```json|```/g, '').trim();
 }
 
+// export function extractJSON(text) {
+//   const match = text.match(/{[\s\S]*}/);  // Look for curly braces to find the object
+//   if (match) {
+//     return match[0];
+//   }
+//   throw new Error("No JSON object found in the response text");
+// }
+
+// export function extractJSON(text) {
+//   const match = text.match(/\[[\s\S]*?\]/);  // Match the first JSON array in the text
+//   if (match) {
+//     return match[0];
+//   }
+//   throw new Error("No JSON array found in the response text");
+// }
+
+
+
 export async function chat(message) {
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
     const prompt = message;
@@ -46,19 +64,44 @@ export async function generateLesson(language, level, topic) {
   }
 }
 
+// export async function getLessonSuggestions(language, level) {
+//   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+//   // const prompt = `Suggest 6 real worlds topics (2-4 words each) for ${language} language lessons at ${level} level. Only return a JSON array of short topic names, no descriptions, with english definitions next to it preceded by a colon`;
+//   const prompt = `Suggest 6 real-world topics (2-4 words each) for ${language} language lessons at ${level} level. ONLY return a JSON array like this: ["Travel", "Food and Dining", "Cultural Traditions", "Weather and Seasons", "Daily Routines", "Work and Careers"] DO NOT add any explanations or formatting — ONLY the raw JSON array.`;
+
+
+//   try {
+//     const result = await model.generateContent(prompt);
+//     const response = await result.response;
+//     // let text = response.text();
+//     // text = extractJSON(JSON.stringify(text));
+//     // return JSON.parse(text);
+
+
+//     const rawText = response.text();
+//     const jsonText = extractJSON(rawText);
+//     const parsed = JSON.parse(jsonText);  // This should now be an object!
+//     return parsed;
+
+//   } catch (error) {
+//     console.error('Error getting lesson suggestions:', error);
+//     throw error;
+//   }
+// } 
 export async function getLessonSuggestions(language, level) {
   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-  const prompt = `Suggest 6 real worlds topics (2-4 words each) for ${language} language lessons at ${level} level. Only return a JSON array of short topic names, no descriptions, with english definitions next to it preceded by a colon`;
+  const prompt = `Suggest 6 real-world topics (2-4 words each) for ${language} language lessons at ${level} level. ONLY return a JSON array like this: ["Travel", "Food and Dining", "Cultural Traditions", "Weather and Seasons", "Daily Routines", "Work and Careers"] DO NOT add any explanations or formatting — ONLY the raw JSON array.`;
 
   try {
     const result = await model.generateContent(prompt);
     const response = await result.response;
-    let text = response.text();
-    text = extractJSON(JSON.stringify(text));
-    return JSON.parse(text);
+    const text = await response.text();
+    const jsonText = extractJSON(text);              // Now should work!
+    return JSON.parse(jsonText);                     // Should give you an array
   } catch (error) {
     console.error('Error getting lesson suggestions:', error);
     throw error;
   }
-} 
+}

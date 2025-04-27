@@ -112,7 +112,8 @@ export default function LearnPage() {
       setLoading(true);
       setError(null);
       try {
-        const prompt = `Suggest 6 real worlds topics (2-4 words each) for ${language} language lessons at ${level} level. Only return a JSON array of short topic names, no descriptions, with english definitions next to it preceded by a colon`;
+        const prompt = 'Suggest 6 real worlds topics (2-4 words each) for ${language} language lessons at ${level} level. Only return a JSON array of short topic names, no descriptions, with english definitions next to it preceded by a colon';
+        // const prompt = `Suggest 6 real worlds topics (2-4 words each) for ${language} language lessons at ${level} level. Only return a JSON array of short topic names, no descriptions, with english definitions next to it preceded by a colon`;
         const topics = await getLessonSuggestions(language, level);
         setSuggestions(topics);
       } catch (err) {
@@ -229,6 +230,36 @@ export default function LearnPage() {
           <section className='vocabulary-section'>
             <h3>Vocabulary</h3>
             <div className='vocabulary-grid'>
+              {Array.isArray(lesson.vocabulary) && lesson.vocabulary.length > 0 ? (
+                lesson.vocabulary.map((item, index) => (
+                  <div key={index} className='vocabulary-card'>
+                    <div>
+                      {item.chinese || item.spanish || item.french || item.italian || item.norwegian || item.cantonese}
+                      <button
+                        onClick={() => {
+                          setSpeakingIndex(index);
+                          handleSpeak(item.chinese || item.spanish || item.french || item.italian || item.norwegian || item.cantonese)
+                            .finally(() => setSpeakingIndex(null));
+                        }}
+                        disabled={speakingIndex == index}
+                        style={{ marginLeft: '8px' }}
+                      >
+                        {speakingIndex === index ? "🔄 Loading Lingo..." : "🔊"}
+                      </button>
+                    </div>
+                    <div>{item.pinyin || item.pronunciation || ''}</div>
+                    <div>{item.english}</div>
+                  </div>
+                ))
+              ) : (
+                <p>No vocabulary available for this lesson.</p>
+              )}
+            </div>
+          </section>
+
+          {/* <section className='vocabulary-section'>
+            <h3>Vocabulary</h3>
+            <div className='vocabulary-grid'>
               {lesson.vocabulary.map((item, index) => (
                 <div key={index} className='vocabulary-card'>
                   <div>
@@ -250,8 +281,36 @@ export default function LearnPage() {
                 </div>
               ))}
             </div>
-          </section>
+          </section> */}
           <section className='sentences-section'>
+            <h3>Example Sentences</h3>
+            {Array.isArray(lesson.sentences) && lesson.sentences.length > 0 ? (
+              lesson.sentences.map((sentence, index) => (
+                <div key={index} className='sentence-card'>
+                  <div>
+                    {sentence.chinese || sentence.spanish || sentence.french || sentence.italian || sentence.norwegian || sentence.cantonese}
+                    <button
+                      onClick={() => {
+                        setSpeakingIndex(index);
+                        handleSpeak(sentence.chinese || sentence.spanish || sentence.french || sentence.italian || sentence.norwegian || sentence.cantonese)
+                          .finally(() => setSpeakingIndex(null));
+                      }}
+                      disabled={speakingIndex == index}
+                      style={{ marginLeft: '8px' }}
+                    >
+                      {speakingIndex === index ? "🔄 Loading Lingo..." : "🔊"}
+                    </button>
+                  </div>
+                  <div>{sentence.pinyin || sentence.pronunciation || ''}</div>
+                  <div>{sentence.english}</div>
+                </div>
+              ))
+            ) : (
+              <p>No example sentences available for this lesson.</p>
+            )}
+          </section>
+
+          {/* <section className='sentences-section'>
             <h3>Example Sentences</h3>
             {lesson.sentences.map((sentence, index) => (
               <div key={index} className='sentence-card'>
@@ -273,23 +332,49 @@ export default function LearnPage() {
                 <div>{sentence.english}</div>
               </div>
             ))}
-          </section>
+          </section> */}
           <section className='cultural-notes'>
+            <h3>Cultural Notes</h3>
+            <ul>
+              {Array.isArray(lesson.culturalNotes) && lesson.culturalNotes.length > 0 ? (
+                lesson.culturalNotes.map((note, index) => (
+                  <li key={index}>{note}</li>
+                ))
+              ) : (
+                <p>No cultural notes available for this lesson.</p>
+              )}
+            </ul>
+          </section>
+
+          {/* <section className='cultural-notes'>
             <h3>Cultural Notes</h3>
             <ul>
               {lesson.culturalNotes.map((note, index) => (
                 <li key={index}>{note}</li>
               ))}
             </ul>
-          </section>
+          </section> */}
           <section className='exercises'>
+            <h3>Practice Exercises</h3>
+            <ol>
+              {Array.isArray(lesson.exercises) && lesson.exercises.length > 0 ? (
+                lesson.exercises.map((exercise, index) => (
+                  <li key={index}>{exercise}</li>
+                ))
+              ) : (
+                <p>No exercises available for this lesson.</p>
+              )}
+            </ol>
+          </section>
+
+          {/* <section className='exercises'>
             <h3>Practice Exercises</h3>
             <ol>
               {lesson.exercises.map((exercise, index) => (
                 <li key={index}>{exercise}</li>
               ))}
             </ol>
-          </section>
+          </section> */}
         </div>
       ) : null}
     </div>
