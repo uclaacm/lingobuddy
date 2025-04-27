@@ -31,6 +31,7 @@ export default function LearnPage() {
       setLoading(true);
       setError(null);
       try {
+        const prompt = `Suggest 6 real worlds topics (2-4 words each) for ${language} language lessons at ${level} level. Only return a JSON array of short topic names, no descriptions, with english definitions next to it preceded by a colon`;
         const topics = await getLessonSuggestions(language, level);
         setSuggestions(topics);
       } catch (err) {
