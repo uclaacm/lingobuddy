@@ -55,7 +55,7 @@ export async function getLessonSuggestions(language, level) {
     const result = await model.generateContent(prompt);
     const response = await result.response;
     let text = response.text();
-    text = extractJSON(text);
+    text = extractJSON(JSON.stringify(text));
     return JSON.parse(text);
   } catch (error) {
     console.error('Error getting lesson suggestions:', error);
