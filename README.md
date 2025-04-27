@@ -65,7 +65,7 @@ cd frontend
 
 9. Install dependencies in frontend
 ```
-npm install
+npm install --force
 ```
 
 10. Run frontend
