@@ -29,7 +29,7 @@ export default function LearnPage() {
   const [speakingIndex, setSpeakingIndex] = useState(null);
 
 
-  let currentAudio = null;  // Add this outside your function, at the component level
+  let currentAudio = null;
 
   const handleSpeak = async (text) => {
     try {
@@ -44,12 +44,11 @@ export default function LearnPage() {
       }
   
       const audioData = await response.arrayBuffer();
-      console.log('Audio buffer size:', audioData.byteLength);  // ✅ Confirm size
+      console.log('Audio buffer size:', audioData.byteLength);
   
       const audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
 
   
-      // ✅ Wrapping decodeAudioData in a promise to handle Safari/Chrome differences:
       const decodedAudio = await new Promise((resolve, reject) => {
         audioContext.decodeAudioData(audioData, resolve, reject);
       });
@@ -63,7 +62,6 @@ export default function LearnPage() {
     }
   };
  
-  // Load lesson suggestions only
   useEffect(() => {
     async function loadSuggestions() {
       setLoading(true);
@@ -81,7 +79,6 @@ export default function LearnPage() {
     loadSuggestions();
   }, [language, level]);
 
-  // Handle topic selection and load lesson
   const handleTopicSelect = async (topic) => {
     setSelectedTopic(topic);
     setLoading(true);
@@ -94,7 +91,6 @@ export default function LearnPage() {
     setLoading(false);
   };
 
-  // Chat handler
   const handleChatSend = async (e) => {
     e.preventDefault();
     if (!chatInput.trim()) return;

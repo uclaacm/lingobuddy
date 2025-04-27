@@ -1,6 +1,5 @@
 import { GoogleGenerativeAI, createUserContent, createPartfromUri } from '@google/generative-ai';
 
-// Initialize the Gemini API
 const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
 
 function extractJSON(text) {
