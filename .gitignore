@@ -11,3 +11,4 @@ backend/.env
 google-key.json
 
 .next
+node_modules
