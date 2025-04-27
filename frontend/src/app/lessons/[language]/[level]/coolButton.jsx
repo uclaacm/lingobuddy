@@ -3,20 +3,20 @@ import { FaMicrophone } from "react-icons/fa";
 import './lesson.css';
 
 export default function RotatingButton() {
-  const [isRotating, setIsRotating] = useState(false);
+  const [isPulsing, setIsPulsing] = useState(false);
 
   const handleClick = () => {
-    setIsRotating(!isRotating);
+    setIsPulsing(!isPulsing);
   };
 
   return (
     <div className="button-container">
       <button
-        className={`microphone-btn${isRotating ? ' rotating-border' : ''}`}
+        className={`microphone-btn${isPulsing ? ' active' : ''}`}
         onClick={handleClick}
       >
-        <FaMicrophone />
+        <FaMicrophone size={40} />
       </button>
     </div>
   );
-} 
+}

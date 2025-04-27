@@ -50,7 +50,7 @@ export async function generateLesson(language, level, topic) {
 export async function getLessonSuggestions(language, level) {
   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-  const prompt = `Suggest 5 interesting topics for ${language} language lessons at ${level} level. \nReturn the response as a JSON array of strings.`;
+  const prompt = `Suggest 6 real worlds topics (2-4 words each) for ${language} language lessons at ${level} level. Only return a JSON array of short topic names, no descriptions, with english definitions next to it preceded by a colon`;
 
   try {
     const result = await model.generateContent(prompt);
