@@ -4,6 +4,7 @@
 - [Project Members](#project-members)
 - [Project Description](#project-description)
 - [Technology Stack](#technology-stack)
+- [Setup Instructions](#setup-instructions
 
 ## Project Members
 Jeff Huang, Lorelei Tang, Hannah Kendall, Sebastian Mendez Johannessen
@@ -23,7 +24,7 @@ LingoBuddy is an AI-powered tool for learning new languages. It provides a platf
 #### Database
 - Supabase
 
-## Setup Instructions - how to run LingoBuddy locally
+## Setup Instructions
 1. Clone this GitHub repository
 ```
 git clone https://github.com/sebomaniac/lingobuddy.git
