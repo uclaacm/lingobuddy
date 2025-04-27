@@ -29,20 +29,36 @@ export default function LearnPage() {
   const [showTopics, setShowTopics] = useState(false);
   const [speakingIndex, setSpeakingIndex] = useState(null);
   const [listening, setListening] = useState(false);
+  // const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const [recognition, setRecognition] = useState(null);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        const recognitionInstance = new SpeechRecognition();
+        recognitionInstance.lang = 'en-US'; // or set dynamically based on your app's language
+        recognitionInstance.interimResults = false;
+        recognitionInstance.maxAlternatives = 1;
+        setRecognition(recognitionInstance);
+      } else {
+        console.error('Speech recognition not supported by this browser.');
+      }
+    }
+  }, []);
 
   const handleSpeechRecognition = () => {
-    if (!SpeechRecognition) {
+    if (!recognition) {
       alert("Speech recognition is not supported in this browser.");
       return;
     }
   
-    const recognition = new SpeechRecognition();
     recognition.lang = language === "french" ? "fr-FR"
-                      : language === "spanish" ? "es-ES"
-                      : language === "norwegian" ? "nb-NO"
-                      : language === "mandarin" ? "zh-CN"
-                      : "en-US";
+      : language === "spanish" ? "es-ES"
+      : language === "norwegian" ? "nb-NO"
+      : language === "mandarin" ? "zh-CN"
+      : "en-US";
+  
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
   
@@ -68,13 +84,9 @@ export default function LearnPage() {
     };
   
     recognition.start();
-  };
-  
-  
+  };  
 
   let currentAudio = null;
-
-  
 
   const handleSpeak = async (text) => {
     try {
