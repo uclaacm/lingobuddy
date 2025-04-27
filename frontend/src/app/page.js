@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { redirect, useRouter } from "next/navigation";
 import { supabase } from '../../lib/supabaseClient';
 import './homepage.css';
+import Typewriter from 'typewriter-effect';
+import { Cursor } from "mongoose";
 
 export default function Home() {
 
@@ -14,32 +16,6 @@ export default function Home() {
   const router = useRouter();
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
-  const [firstLine, setFirstLine] = useState(""); // State for the first line
-
-  useEffect(() => {
-    const firstText = "Piick a language and level to get started";
-    let firstIndex = 0;
-
-    // Typing effect for the first line
-    const typeFirstLine = () => {
-      if (firstIndex < firstText.length) {
-        setFirstLine((prev) => prev + firstText.charAt(firstIndex));
-        firstIndex++;
-        setTimeout(typeFirstLine, 60); // Adjust typing speed here
-      }
-    };
-
-    // Typing effect for the second line
-    const typeSecondLine = () => {
-      if (secondIndex < secondText.length) {
-        setSecondLine((prev) => prev + secondText.charAt(secondIndex));
-        secondIndex++;
-        setTimeout(typeSecondLine, 60); // Adjust typing speed here
-      }
-    };
-
-    typeFirstLine(); // Start typing the first line
-  }, []);
 
   const languages = [
     { name: "Spanish", flag: "🇪🇸" },
@@ -72,7 +48,18 @@ export default function Home() {
     <div className="container-homepage">
       <div className="middle-section">
         <div className="title-homepage">
-          <h1>{firstLine}</h1>
+        <h1>
+            <Typewriter
+              options={{
+                strings: ["Pick a language and level to get started"],
+                autoStart: true,
+                loop: true,
+                delay: 60, // Adjust typing speed here
+                pauseFor: 999999999,
+                cursor: ""
+              }}
+            />
+          </h1>
         </div>
 
 
