@@ -108,7 +108,6 @@ input[type="text"], input[type="search"] {
   border: 1px solid #ccc;
 }
 
-
 button[type="submit"] {
   padding: 0 16px;
   border-radius: 4px;
@@ -122,6 +121,20 @@ button[type="submit"] {
 button[type="submit"]:disabled {
   background: #ccc;
   cursor: not-allowed;
+} 
+
+/* Speak Button styles */
+.speak-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  transition: transform 0.1s ease;
+}
+
+.speak-button:hover {
+  transform: scale(1.2);
+  color: #0070f3;
 }
 
 .button-container {

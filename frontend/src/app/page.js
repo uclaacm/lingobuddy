@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { redirect, useRouter } from "next/navigation";
 import { supabase } from '../../lib/supabaseClient';
-import './homepage.css';
+import './styles.css';
 import Typewriter from 'typewriter-effect';
 
 export default function Home() {
@@ -45,7 +45,7 @@ export default function Home() {
   }
   return (
     <div className="container-homepage">
-      <div className="middle-section">
+      <div className="middle-section-homepage">
         <div className="title-homepage">
         <h1>
             <Typewriter
@@ -100,6 +100,7 @@ export default function Home() {
 
       <footer className="footer-text">
         <p>Made with 💙💛 by Jeff, Lorelei, Hannah, and Sebastian</p>
+        <p>Los Angeles, California · 2025</p>
       </footer>
     </div>
   );
