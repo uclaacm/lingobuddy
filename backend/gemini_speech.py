@@ -31,6 +31,7 @@ CONFIG = types.LiveConnectConfig(
                     "Do not translate, do not change the language, do not explain, "
                     "and do not add anything extra. "
                     "Just speak the input text word-for-word aloud, in the language provided."
+                    "You should not be speaking in English, but in the language of the input text, which will be either Spanish, French, Norwegian, or Mandarin. "
                 )
             )
         ],

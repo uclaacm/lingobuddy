@@ -2,11 +2,14 @@ import { useState } from 'react';
 import { FaMicrophone } from "react-icons/fa";
 import './lesson.css';
 
-export default function RotatingButton() {
+export default function RotatingButton({ onMicClick }) {
   const [isPulsing, setIsPulsing] = useState(false);
 
   const handleClick = () => {
     setIsPulsing(!isPulsing);
+    if (onMicClick) {
+      onMicClick(); // ✅ Call the speech recognition function passed from page.js!
+    }
   };
 
   return (
