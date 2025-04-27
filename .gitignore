@@ -13,3 +13,5 @@ google-key.json
 
 .next
 node_modules
+
+.DS_Store
