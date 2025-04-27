@@ -121,7 +121,7 @@ export default function Profile() {
         <button
             className={`add-button ${addLanguage ? "enabled" : "disabled"}`}
             onClick={() => {
-              if (languages.length >= 4) {
+              if (languages.length >= 4 || addLanguage === '') {
                 setAddLanguage('');
               }
               else {
