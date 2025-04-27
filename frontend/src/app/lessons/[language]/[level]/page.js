@@ -8,6 +8,7 @@ import { generateLesson, getLessonSuggestions, chat as chatGemini } from '@/lib/
 import RotatingButton from '@/app/lessons/[language]/[level]/coolButton';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 export default function LearnPage() {
 
@@ -27,9 +28,53 @@ export default function LearnPage() {
   const [selectedTopic, setSelectedTopic] = useState('');
   const [showTopics, setShowTopics] = useState(false);
   const [speakingIndex, setSpeakingIndex] = useState(null);
+  const [listening, setListening] = useState(false);
 
+
+  const handleSpeechRecognition = () => {
+    if (!SpeechRecognition) {
+      alert("Speech recognition is not supported in this browser.");
+      return;
+    }
+  
+    const recognition = new SpeechRecognition();
+    recognition.lang = language === "french" ? "fr-FR"
+                      : language === "spanish" ? "es-ES"
+                      : language === "norwegian" ? "nb-NO"
+                      : language === "mandarin" ? "zh-CN"
+                      : "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+  
+    recognition.onstart = () => {
+      console.log("Listening...");
+      setListening(true);
+    };
+  
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      console.log("Transcript:", transcript);
+      setChatInput(transcript);
+      handleChatSend({ preventDefault: () => {} });
+    };
+  
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event.error);
+    };
+  
+    recognition.onend = () => {
+      console.log("Speech recognition ended.");
+      setListening(false);
+    };
+  
+    recognition.start();
+  };
+  
+  
 
   let currentAudio = null;
+
+  
 
   const handleSpeak = async (text) => {
     try {
@@ -111,10 +156,10 @@ export default function LearnPage() {
           redirect("/profile");
         }
       }>Profile</button>
-      <RotatingButton />
+      <RotatingButton onMicClick={handleSpeechRecognition} />
       {/* Simple Chat UI */}
       <div style={{ maxWidth: 700, margin: '2rem auto' }}>
-        <h2>Chat with Gemini</h2>
+        <h2>Chat with Lingo</h2>
         <form onSubmit={handleChatSend} style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
           <input
             value={chatInput}
@@ -125,10 +170,10 @@ export default function LearnPage() {
           <button type='submit' disabled={chatLoading || !chatInput.trim()}>Send</button>
         </form>
         <div style={{ minHeight: 40 }}>
-          {chatLoading && <div>Gemini is typing...</div>}
+          {chatLoading && <div>Lingo is thinking...</div>}
           {chatResponse && (
                             <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                              {`**Gemini:** ${chatResponse}`}
+                              {`**Lingo:** ${chatResponse}`}
                             </ReactMarkdown>
                             )}
         </div>
@@ -197,7 +242,7 @@ export default function LearnPage() {
                       disabled={speakingIndex == index}
                       style={{ marginLeft: '8px' }}
                     >
-                      {speakingIndex === index ? "🔄 Speaking..." : "🔊"}
+                      {speakingIndex === index ? "🔄 Loading Lingo..." : "🔊"}
                     </button>
                   </div>
                   <div>{item.pinyin || item.pronunciation || ''}</div>
@@ -213,11 +258,15 @@ export default function LearnPage() {
                 <div>
                   {sentence.chinese || sentence.spanish || sentence.french || sentence.italian || sentence.norwegian || sentence.cantonese}
                   <button
-                    onClick={() => handleSpeak(sentence.chinese || sentence.spanish || sentence.french || sentence.italian || sentence.norwegian || sentence.cantonese)}
-                    className="speak-button"
+                    onClick={() => {
+                      setSpeakingIndex(index);
+                      handleSpeak(sentence.chinese || sentence.spanish || sentence.french || sentence.italian || sentence.norwegian || sentence.cantonese)
+                        .finally(() => setSpeakingIndex(null));
+                    }}
+                    disabled={speakingIndex == index}
                     style={{ marginLeft: '8px' }}
                   >
-                    🔊
+                    {speakingIndex === index ? "🔄 Loading Lingo..." : "🔊"}
                   </button>
                 </div>
                 <div>{sentence.pinyin || sentence.pronunciation || ''}</div>
