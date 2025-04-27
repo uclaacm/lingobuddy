@@ -6,15 +6,14 @@ import {useState, useEffect} from "react";
 import {redirect} from "next/navigation";
 import { supabase } from '../../../lib/supabaseClient';
 import '../homepage.css';
+import Typewriter from 'typewriter-effect';
 
 
 export default function Login() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(null);
-    const [firstLine, setFirstLine] = useState(""); // State for the first line
-    const [secondLine, setSecondLine] = useState(""); // State for the second line
+    const [showSecondTypewriter, setShowSecondTypewriter] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -59,43 +58,42 @@ export default function Login() {
         return data;
       }
 
-        useEffect(() => {
-          const firstText = "Weelcome to LingoBuddy 🌍";
-          const secondText = "–  Your AI-Powered Language Learner";
-          let firstIndex = 0;
-          let secondIndex = 0;
-      
-          // Typing effect for the first line
-          const typeFirstLine = () => {
-            if (firstIndex < firstText.length) {
-              setFirstLine((prev) => prev + firstText.charAt(firstIndex));
-              firstIndex++;
-              setTimeout(typeFirstLine, 60); // Adjust typing speed here
-            } else {
-              // Start typing the second line after the first line is complete
-              setTimeout(typeSecondLine, 500); // Delay before starting the second line
-            }
-          };
-      
-          // Typing effect for the second line
-          const typeSecondLine = () => {
-            if (secondIndex < secondText.length) {
-              setSecondLine((prev) => prev + secondText.charAt(secondIndex));
-              secondIndex++;
-              setTimeout(typeSecondLine, 60); // Adjust typing speed here
-            }
-          };
-      
-          typeFirstLine(); // Start typing the first line
-        }, []);
-
-return (
+  return (
     <div className="container-login">
-        <div className="middle-section">
+      <div className="middle-section">
         <div className="title">
-          <h1>{firstLine}</h1>
-          <h1>{secondLine}</h1>
+          {/* First Typewriter */}
+          <Typewriter
+            options={{
+              autoStart: true,
+              loop: false, // Ensure it runs only once
+              delay: 60, // Adjust typing speed here
+              cursor: "", // Remove cursor after typing
+            }}
+            onInit={(typewriter) => {
+              typewriter
+                .typeString("Welcome to LingoBuddy 🌍")
+                .callFunction(() => setShowSecondTypewriter(true)) // Trigger the second Typewriter
+                .start();
+            }}
+          />
+
+          {/* Second Typewriter */}
+          {showSecondTypewriter && (
+            <Typewriter
+              options={{
+                autoStart: true,
+                loop: false, // Ensure it runs only once
+                delay: 60, // Adjust typing speed here
+                cursor: "", // Remove cursor after typing
+              }}
+              onInit={(typewriter) => {
+                typewriter.typeString("–  Your AI-Powered Language Learner").start();
+              }}
+            />
+          )}
         </div>
+
         <div className="login-card">
             <h1 className="login-card-headline">Login</h1>
             <form className="login-form" onSubmit={handleSubmit}>  
@@ -112,7 +110,7 @@ return (
             <div className="flex items-center flex-col sm:flex-row justify-center mt-2">
                 <p>New to LingoBuddy?&nbsp;
                 <a
-                    style={{ color: '#193c4d' }} 
+                    style={{ color: '#4d8c9d' }} 
                     href="/register"
                 >
                     Sign Up
