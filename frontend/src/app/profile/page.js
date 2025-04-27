@@ -64,7 +64,7 @@ export default function Profile() {
 
     return (
       <div className="container-login">
-      <div className="middle-section">
+      <div className="middle-section-login">
         <div className="title-homepage">
           <h1>Welcome, {username}!</h1>
         </div>
