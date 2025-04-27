@@ -198,6 +198,7 @@ export default function Login() {
         </div>
         <footer className="footer-text">
           <p>Made with 💙💛 by Jeff, Lorelei, Hannah, and Sebastian</p>
+          <p>Los Angeles, California · 2025</p>
         </footer>
     </div>
 );

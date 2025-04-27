@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabaseClient';
 import { redirect, useRouter } from 'next/navigation';
-import '../profile.css';
+import '../homepage.css';
 
 
 export default function Profile() { 
@@ -34,7 +34,7 @@ export default function Profile() {
             let email = sessionStorage.getItem("email");
             const { data, error } = await  supabase
                 .from('profiles')
-                .select('username, language_1, language_2, language_3')
+                .select('username, language_1, language_2, language_3, language_4')
                 .eq('email', email)
                 .single();
             if (error) {
@@ -44,7 +44,7 @@ export default function Profile() {
             console.log(data);
             setUsername(data.username);
 
-            let nonnull_languages = [data.language_1, data.language_2, data.language_3].filter(lang => lang !== null);
+            let nonnull_languages = [data.language_1, data.language_2, data.language_3, data.language_4].filter(lang => lang !== null);
             if (nonnull_languages.length === 0) {
                 redirect("/");
             }
@@ -69,7 +69,7 @@ export default function Profile() {
           <h1>Welcome, {username}!</h1>
         </div>
 
-        <div className="login-card">
+        <div className="dashboard-card">
         {/* Language Selection */}
         <div className="language-selection">
           {languages.map((language) => (
@@ -78,7 +78,7 @@ export default function Profile() {
               onClick={() => setSelectedLanguage(language)}
               className={`language-button ${selectedLanguage === language ? "selected" : ""}`}
             >
-              <span className="button-text">{language.flag} {language}</span>
+              <span className="button-text">{language}</span>
             </button>
           ))}
         </div>
@@ -119,7 +119,7 @@ export default function Profile() {
           </select>
         </div>
         <button
-            className={`add-button enabled`}
+            className={`add-button ${addLanguage ? "enabled" : "disabled"}`}
             onClick={() => {
               addLanguageYuh(addLanguage);
               setAddLanguage('');
@@ -132,6 +132,7 @@ export default function Profile() {
 
       <footer className="footer-text">
         <p>Made with 💙💛 by Jeff, Lorelei, Hannah, and Sebastian</p>
+        <p>Los Angeles, California · 2025</p>
       </footer>
     </div>
     );
@@ -141,7 +142,7 @@ async function addLanguageYuh(language) {
   let email = sessionStorage.getItem("email");
     const {data, error} = await supabase
         .from('profiles')
-        .select('language_1, language_2, language_3, email')
+        .select('language_1, language_2, language_3, language_4, email')
         .eq('email', email)
         .single();
     if (error) {

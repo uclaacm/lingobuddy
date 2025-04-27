@@ -9,7 +9,6 @@
   background-color: #f9f9f9;
   max-width: 100%;
   background-image: url('../../public/world-map.png');
-
   background-repeat: no-repeat; /* Prevents the image from repeating */
   background-position: center; /* Centers the image */
 }
@@ -121,7 +120,7 @@
 }
 
 .login-card {
-  background-color: white;
+  background-color: #f9f9f9;
   padding: 25px;
   border-radius: 8px;
   height: 50vh;
@@ -130,6 +129,20 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  box-shadow: #6d6d6d84 0px 0px 10px;
+}
+
+.dashboard-card {
+  background-color: #f9f9f9;
+  padding: 25px;
+  border-radius: 8px;
+  height: 50vh;
+  width: 45vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: #6d6d6d84 0px 0px 10px;
 }
 
 .login-form {
