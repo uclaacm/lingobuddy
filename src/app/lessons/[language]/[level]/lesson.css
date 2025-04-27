@@ -107,6 +107,8 @@ input[type="text"], input[type="search"] {
   border-radius: 4px;
   border: 1px solid #ccc;
 }
+
+
 button[type="submit"] {
   padding: 0 16px;
   border-radius: 4px;
@@ -120,4 +122,66 @@ button[type="submit"] {
 button[type="submit"]:disabled {
   background: #ccc;
   cursor: not-allowed;
+}
+
+.button-container {
+  position: relative;
+  display: inline-block;
+  margin: 10px;
+}
+
+.microphone-btn {
+  background: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 75px;
+  height: 75px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.microphone-btn.rotating-border::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #3498db, #2980b9, #3498db);
+  z-index: -1;
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.topic-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.topic-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 12px;
 } 

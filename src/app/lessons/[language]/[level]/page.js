@@ -5,41 +5,39 @@ import '../../../learnpage.css';
 import './lesson.css';
 import { useEffect, useState } from 'react';
 import { generateLesson, getLessonSuggestions, chat as chatGemini } from '@/lib/gemini';
+import RotatingButton from '@/app/lessons/[language]/[level]/coolButton';
 
 export default function LearnPage() {
   const params = useParams();
   const { language, level } = params;
   const [lesson, setLesson] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [chatInput, setChatInput] = useState('');
   const [chatResponse, setChatResponse] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState('');
+  const [showTopics, setShowTopics] = useState(false);
 
-  // Load lesson suggestions and first lesson
+  // Load lesson suggestions only
   useEffect(() => {
-    async function loadLesson() {
+    async function loadSuggestions() {
       setLoading(true);
       setError(null);
       try {
         const topics = await getLessonSuggestions(language, level);
         setSuggestions(topics);
-        let topic = topics && topics.length > 0 ? topics[0] : 'Greetings';
-        setSelectedTopic(topic);
-        const lesson = await generateLesson(language, level, topic);
-        setLesson(lesson);
       } catch (err) {
-        setError('Failed to load lesson');
+        setError('Failed to load suggestions');
       } finally {
         setLoading(false);
       }
     }
-    loadLesson();
+    loadSuggestions();
   }, [language, level]);
 
-  // Handle topic selection
+  // Handle topic selection and load lesson
   const handleTopicSelect = async (topic) => {
     setSelectedTopic(topic);
     setLoading(true);
@@ -69,6 +67,7 @@ export default function LearnPage() {
 
   return (
     <div className='container'>
+      <RotatingButton />
       {/* Simple Chat UI */}
       <div style={{ maxWidth: 500, margin: '2rem auto' }}>
         <h2>Chat with Gemini</h2>
@@ -89,22 +88,43 @@ export default function LearnPage() {
       {/* Topic suggestions */}
       {suggestions.length > 0 && (
         <div className="topic-selector">
-          <h2>Choose a Topic</h2>
-          <div className="topic-buttons">
-            {suggestions.map((topic, index) => (
-              <button
-                key={index}
-                onClick={() => handleTopicSelect(topic)}
-                className={`topic-button${selectedTopic === topic ? ' selected' : ''}`}
-                style={{ margin: '0 8px 8px 0', padding: '8px 16px', borderRadius: '5px', border: '1px solid #3498db', background: selectedTopic === topic ? '#3498db' : '#fff', color: selectedTopic === topic ? '#fff' : '#3498db', cursor: 'pointer' }}
-              >
-                {topic}
-              </button>
-            ))}
-          </div>
+          <button 
+            onClick={() => setShowTopics(!showTopics)}
+            style={{ 
+              padding: '10px 20px', 
+              fontSize: '1.2rem',
+              backgroundColor: '#3498db',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              marginBottom: '1rem'
+            }}
+          >
+            {showTopics ? 'Hide Topics' : 'Choose a Topic'}
+          </button>
+          {showTopics && (
+            <div className="topic-buttons">
+              {suggestions.map((topic, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleTopicSelect(topic)}
+                  className={`topic-button${selectedTopic === topic ? ' selected' : ''}`}
+                  style={{ margin: '0 8px 8px 0', padding: '8px 16px', borderRadius: '5px', border: '1px solid #3498db', background: selectedTopic === topic ? '#3498db' : '#fff', color: selectedTopic === topic ? '#fff' : '#3498db', cursor: 'pointer' }}
+                >
+                  {topic}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       )}
       {/* Lesson content */}
+      {!lesson && !loading && !error && (
+        <div style={{ textAlign: 'center', margin: '2rem' }}>
+          <p>Select a topic above to start learning!</p>
+        </div>
+      )}
       {loading ? (
         <div className='loading'>Loading lesson...</div>
       ) : error ? (
