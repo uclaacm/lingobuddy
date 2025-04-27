@@ -4,7 +4,7 @@
 - [Project Members](#project-members)
 - [Project Description](#project-description)
 - [Technology Stack](#technology-stack)
-- [Setup Instructions](#setup-instructions
+- [Setup Instructions](#setup-instructions)
 
 ## Project Members
 Jeff Huang, Lorelei Tang, Hannah Kendall, Sebastian Mendez Johannessen
