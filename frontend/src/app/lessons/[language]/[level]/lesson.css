@@ -142,14 +142,55 @@ button[type="submit"]:disabled {
   display: inline-block;
   margin: 10px;
 }
-
 .microphone-btn {
+  background: linear-gradient(135deg, #3498db, #6dd5fa);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.2s;
+}
+
+/* Only animate when 'active' class is added */
+.microphone-btn.active {
+  animation: pulse 1.5s infinite;
+  box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7);
+}
+
+.microphone-btn:hover {
+  transform: scale(1.05);
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 20px rgba(52, 152, 219, 0);
+  }
+  80% {
+    box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
+  }
+}
+/* .microphone-btn {
   background: #3498db;
   color: #fff;
   border: none;
   border-radius: 50%;
-  width: 75px;
-  height: 75px;
+  width: 100px;
+  height: 100px;
   font-size: 1.5rem;
   cursor: pointer;
   outline: none;
@@ -180,7 +221,7 @@ button[type="submit"]:disabled {
   to {
     transform: rotate(360deg);
   }
-}
+} */
 
 .topic-selector {
   display: flex;
