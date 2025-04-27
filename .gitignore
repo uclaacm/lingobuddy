@@ -2,14 +2,15 @@
 frontend/node_modules/
 
 # Python
-backend/venv/
+backend/.venv/
 backend/__pycache__/
-backend/.env
 
 # Environment files
+
+google-key.json
 frontend/.env.local
 backend/.env
-google-key.json
-
 .next
 node_modules
+
+.DS_Store
