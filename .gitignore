@@ -10,3 +10,6 @@ backend/.env
 frontend/.env.local
 backend/.env
 google-key.json
+
+.next
+node_modules
