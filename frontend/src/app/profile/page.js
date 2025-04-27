@@ -19,6 +19,7 @@ export default function Profile() {
     const [languages, setLanguages] = useState([]);
     const [selectedLanguage, setSelectedLanguage] = useState('');
     const [selectedLevel, setSelectedLevel] = useState('');
+    const [addLanguage, setAddLanguage] = useState('');
 
     const levels = ["Basic", "Intermediate", "Advanced"];
 
@@ -59,12 +60,16 @@ export default function Profile() {
         return <div>Loading...</div>;
     }
 
+    console.log("Languages: ", languages);
+
     return (
-    <div className="container-homepage">
+      <div className="container-login">
       <div className="middle-section">
         <div className="title-homepage">
           <h1>Welcome, {username}!</h1>
         </div>
+
+        <div className="login-card">
         {/* Language Selection */}
         <div className="language-selection">
           {languages.map((language) => (
@@ -102,25 +107,26 @@ export default function Profile() {
 
         <div className="add-language">
           <select
-            value={selectedLanguage}
-            onChange={(e) => setSelectedLanguage(e.target.value)}
+            value={addLanguage}
+            onChange={(e) => setAddLanguage(e.target.value)}
             className="language-dropdown"
           >
-            <option value="">Add a language</option>
-            <option disabled={languages.includes('spanish')} value="Spanish">Spanish</option>
-            <option disabled={languages.includes('french')} value="French">French</option>
-            <option disabled={languages.includes('mandarin')} value="Mandarin">Mandarin</option>
-            <option disabled={languages.includes('norwegian')} value="Norwegian">Italian</option>
+            <option default disabled value="">Add a language</option>
+            <option disabled={languages.includes('Spanish')} value="Spanish">Spanish</option>
+            <option disabled={languages.includes('French')} value="French">French</option>
+            <option disabled={languages.includes('Mandarin')} value="Mandarin">Mandarin</option>
+            <option disabled={languages.includes('Norwegian')} value="Norwegian">Norwegian</option>
           </select>
         </div>
         <button
-            disabled={!selectedLanguage}
-            className={`add-button ${selectedLanguage ? "enabled" : "disabled"}`}
+            className={`add-button enabled`}
             onClick={() => {
-              addLanguage(selectedLanguage);
-              setSelectedLanguage('');
+              addLanguageYuh(addLanguage);
+              setAddLanguage('');
+              setLanguages((prevLanguages) => [...prevLanguages, addLanguage]);
             }}
           > Add Language</button>
+          </div>
 
       </div>
 
@@ -131,39 +137,40 @@ export default function Profile() {
     );
 }
 
-async function addLanguage(language) {
-    const {curr_languages, error} = await supabase
+async function addLanguageYuh(language) {
+  let email = sessionStorage.getItem("email");
+    const {data, error} = await supabase
         .from('profiles')
-        .select('language_1, language_2, language_3')
-        .eq('email', sessionStorage.getItem("email"))
+        .select('language_1, language_2, language_3, email')
+        .eq('email', email)
         .single();
     if (error) {
         console.error('Error fetching languages:', error);
         return null;
     }
-    if (curr_languages.language_1 === null) {
+    console.log("Fetched languages: ", data);
+    if (data.language_1 === null) {
         await supabase
             .from('profiles')
             .update({language_1: language})
             .eq('email', sessionStorage.getItem("email"));
     }
-    else if (curr_languages.language_2 === null) {
+    else if (data.language_2 === null) {
         await supabase
             .from('profiles')
             .update({language_2: language})
             .eq('email', sessionStorage.getItem("email"));
     }
-    else if (curr_languages.language_3 === null) {
+    else if (data.language_3 === null) {
         await supabase
             .from('profiles')
             .update({language_3: language})
             .eq('email', sessionStorage.getItem("email"));
     }
-    else {
-        console.log("All languages are already set.");
-    }
-
-
-
-
+    else if (data.language_4 === null) {
+      await supabase
+          .from('profiles')
+          .update({language_4: language})
+          .eq('email', sessionStorage.getItem("email"));
+  }
 }

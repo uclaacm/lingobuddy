@@ -5,7 +5,6 @@ import { redirect, useRouter } from "next/navigation";
 import { supabase } from '../../lib/supabaseClient';
 import './homepage.css';
 import Typewriter from 'typewriter-effect';
-import { Cursor } from "mongoose";
 
 export default function Home() {
 
