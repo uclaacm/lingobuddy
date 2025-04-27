@@ -24,7 +24,43 @@ export default function LearnPage() {
   const [chatLoading, setChatLoading] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState('');
   const [showTopics, setShowTopics] = useState(false);
+  const [speakingIndex, setSpeakingIndex] = useState(null);
 
+
+  let currentAudio = null;  // Add this outside your function, at the component level
+
+  const handleSpeak = async (text) => {
+    try {
+      const response = await fetch('http://localhost:8000/speak', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to generate speech');
+      }
+  
+      const audioData = await response.arrayBuffer();
+      console.log('Audio buffer size:', audioData.byteLength);  // ✅ Confirm size
+  
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
+
+  
+      // ✅ Wrapping decodeAudioData in a promise to handle Safari/Chrome differences:
+      const decodedAudio = await new Promise((resolve, reject) => {
+        audioContext.decodeAudioData(audioData, resolve, reject);
+      });
+  
+      const source = audioContext.createBufferSource();
+      source.buffer = decodedAudio;
+      source.connect(audioContext.destination);
+      source.start(0);
+    } catch (error) {
+      console.error('Error playing speech:', error);
+    }
+  };
+ 
   // Load lesson suggestions only
   useEffect(() => {
     async function loadSuggestions() {
@@ -144,7 +180,20 @@ export default function LearnPage() {
             <div className='vocabulary-grid'>
               {lesson.vocabulary.map((item, index) => (
                 <div key={index} className='vocabulary-card'>
-                  <div>{item.chinese || item.spanish || item.french || item.italian || item.norwegian || item.cantonese}</div>
+                  <div>
+                    {item.chinese || item.spanish || item.french || item.italian || item.norwegian || item.cantonese}
+                    <button
+                      onClick={() => {
+                        setSpeakingIndex(index);
+                        handleSpeak(item.chinese || item.spanish || item.french || item.italian || item.norwegian || item.cantonese)
+                          .finally(() => setSpeakingIndex(null));
+                      }}
+                      disabled={speakingIndex == index}
+                      style={{ marginLeft: '8px' }}
+                    >
+                      {speakingIndex === index ? "🔄 Speaking..." : "🔊"}
+                    </button>
+                  </div>
                   <div>{item.pinyin || item.pronunciation || ''}</div>
                   <div>{item.english}</div>
                 </div>
@@ -155,7 +204,16 @@ export default function LearnPage() {
             <h3>Example Sentences</h3>
             {lesson.sentences.map((sentence, index) => (
               <div key={index} className='sentence-card'>
-                <div>{sentence.chinese || sentence.spanish || sentence.french || sentence.italian || sentence.norwegian || sentence.cantonese}</div>
+                <div>
+                  {sentence.chinese || sentence.spanish || sentence.french || sentence.italian || sentence.norwegian || sentence.cantonese}
+                  <button
+                    onClick={() => handleSpeak(sentence.chinese || sentence.spanish || sentence.french || sentence.italian || sentence.norwegian || sentence.cantonese)}
+                    className="speak-button"
+                    style={{ marginLeft: '8px' }}
+                  >
+                    🔊
+                  </button>
+                </div>
                 <div>{sentence.pinyin || sentence.pronunciation || ''}</div>
                 <div>{sentence.english}</div>
               </div>
