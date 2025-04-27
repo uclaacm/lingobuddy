@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabaseClient';
 import { redirect, useRouter } from 'next/navigation';
-import '../homepage.css';
+import '../profile.css';
 
 
 export default function Profile() { 
@@ -99,6 +99,29 @@ export default function Profile() {
         >
           Go!
         </button>
+
+        <div className="add-language">
+          <select
+            value={selectedLanguage}
+            onChange={(e) => setSelectedLanguage(e.target.value)}
+            className="language-dropdown"
+          >
+            <option value="">Add a language</option>
+            <option disabled={languages.includes('spanish')} value="Spanish">Spanish</option>
+            <option disabled={languages.includes('french')} value="French">French</option>
+            <option disabled={languages.includes('mandarin')} value="Mandarin">Mandarin</option>
+            <option disabled={languages.includes('norwegian')} value="Norwegian">Italian</option>
+          </select>
+        </div>
+        <button
+            disabled={!selectedLanguage}
+            className={`add-button ${selectedLanguage ? "enabled" : "disabled"}`}
+            onClick={() => {
+              addLanguage(selectedLanguage);
+              setSelectedLanguage('');
+            }}
+          > Add Language</button>
+
       </div>
 
       <footer className="footer-text">
@@ -106,15 +129,6 @@ export default function Profile() {
       </footer>
     </div>
     );
-}
-
-async function getUser() {
-    const { data: { session }, error } = await supabase.auth.getSession();
-    if (error) {
-        console.error('Error fetching user session:', error);
-        return null;
-    }
-    return session ? session.user : null;
 }
 
 async function addLanguage(language) {
