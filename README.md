@@ -40,9 +40,18 @@ cd lingobuddy
 npm install
 ```
 
-4. Add your keys to frontend/.env.local and /backend/.env
+4. Add your keys to database and Gemini API
+```
+// frontend/.env.local
+NEXT_PUBLIC_SUPABASE_URL = 
+NEXT_PUBLIC_SUPABASE_ANON_KEY = 
+NEXT_PUBLIC_GEMINI_API_KEY =
 
-5. Change directory to the backend directory
+// /backend/.env
+GEMINI_API_KEY = 
+```
+
+6. Change directory to the backend directory
 ```
 cd backend
 ```
