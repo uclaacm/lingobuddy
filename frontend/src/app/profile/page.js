@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabaseClient';
 import { redirect, useRouter } from 'next/navigation';
-import '../homepage.css';
+import '../styles.css';
 
 
 export default function Profile() { 
