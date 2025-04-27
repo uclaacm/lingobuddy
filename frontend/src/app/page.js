@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import { redirect, useRouter } from "next/navigation";
 import { supabase } from '../../lib/supabaseClient';
 import './homepage.css';
-// import Typewriter from 'typewriter-effect';
-import { Typewriter } from 'react-simple-typewriter';
+import Typewriter from 'typewriter-effect';
 
 export default function Home() {
 
