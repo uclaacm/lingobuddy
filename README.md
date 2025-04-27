@@ -39,34 +39,41 @@ cd lingobuddy
 npm install
 ```
 
-4. Change directory to the backend directory
+4. Add your keys to frontend/.env.local and /backend/.env
+
+5. Change directory to the backend directory
 ```
 cd backend
 ```
 
-5. Make virtual environment
+6. Make virtual environment
 ```
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-6. Run backend
+7. Run backend
 ```
 python -m uvicorn server:app --reload --host 0.0.0.0 --port 8000
 ```
 
-7. Change directory to frontend
+8. Change directory to frontend
 ```
-cd ../frontend
+cd frontend
 ```
 
-8. Run frontend
+9. Install dependencies in frontend
+```
+npm install
+```
+
+10. Run frontend
 ```
 npm run dev
 ```
 
-9. Open the link in your browser
+11. Open the link in your browser
 ```
 Cmd-Click --> http://localhost:3000/
 ```
