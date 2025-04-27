@@ -1,11 +1,13 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams, redirect } from 'next/navigation';
 import '../../../learnpage.css';
 import './lesson.css';
 import { useEffect, useState } from 'react';
 import { generateLesson, getLessonSuggestions, chat as chatGemini } from '@/lib/gemini';
 import RotatingButton from '@/app/lessons/[language]/[level]/coolButton';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 export default function LearnPage() {
 
@@ -109,9 +111,13 @@ export default function LearnPage() {
 
   return (
     <div className='container'>
+        <button className="profile-button" onClick={() => {
+          redirect("/profile");
+        }
+      }>Profile</button>
       <RotatingButton />
       {/* Simple Chat UI */}
-      <div style={{ maxWidth: 500, margin: '2rem auto' }}>
+      <div style={{ maxWidth: 700, margin: '2rem auto' }}>
         <h2>Chat with Gemini</h2>
         <form onSubmit={handleChatSend} style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
           <input
@@ -124,7 +130,11 @@ export default function LearnPage() {
         </form>
         <div style={{ minHeight: 40 }}>
           {chatLoading && <div>Gemini is typing...</div>}
-          {chatResponse && <div><b>Gemini:</b> {chatResponse}</div>}
+          {chatResponse && (
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                              {`**Gemini:** ${chatResponse}`}
+                            </ReactMarkdown>
+                            )}
         </div>
       </div>
       {/* Topic suggestions */}
