@@ -3,12 +3,12 @@
 import { useParams, redirect } from 'next/navigation';
 import '../../../learnpage.css';
 import './lesson.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { generateLesson, getLessonSuggestions, chat as chatGemini } from '@/lib/gemini';
 import RotatingButton from '@/app/lessons/[language]/[level]/coolButton';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+import LiveConversation from '../../../../components/LiveConversation'; 
 
 export default function LearnPage() {
 
@@ -29,96 +29,50 @@ export default function LearnPage() {
   const [showTopics, setShowTopics] = useState(false);
   const [speakingIndex, setSpeakingIndex] = useState(null);
   const [listening, setListening] = useState(false);
-  // const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const [recognition, setRecognition] = useState(null);
+  const recognitionRef = useRef(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (SpeechRecognition) {
-        const recognitionInstance = new SpeechRecognition();
-        recognitionInstance.lang = 'en-US';
-        recognitionInstance.interimResults = false;
-        recognitionInstance.maxAlternatives = 1;
-        setRecognition(recognitionInstance);
-      } else {
-        console.error('Speech recognition not supported by this browser.');
-      }
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognitionInstance = new SpeechRecognition();
+      recognitionInstance.lang = 'en-US';
+      recognitionInstance.interimResults = false;
+      recognitionInstance.maxAlternatives = 1;
+      setRecognition(recognitionInstance);
+      recognitionRef.current = recognitionInstance;
+
+      recognitionInstance.onstart = () => {
+        console.log("Listening...");
+        setListening(true);
+      };
+
+      recognitionInstance.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        console.log("Transcript:", transcript);
+        setChatInput(transcript);
+        handleChatSend({ preventDefault: () => {} });
+      };
+
+      recognitionInstance.onerror = (event) => {
+        console.error("Speech recognition error:", event.error);
+      };
+
+      recognitionInstance.onend = () => {
+        console.log("Speech recognition ended.");
+        setListening(false);
+      };
+    } else {
+      console.error('Speech recognition not supported by this browser.');
     }
+
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
   }, []);
 
-  const handleSpeechRecognition = () => {
-    if (!recognition) {
-      alert("Speech recognition is not supported in this browser.");
-      return;
-    }
-  
-    recognition.lang = language === "french" ? "fr-FR"
-      : language === "spanish" ? "es-ES"
-      : language === "norwegian" ? "nb-NO"
-      : language === "mandarin" ? "zh-CN"
-      : "en-US";
-  
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-  
-    recognition.onstart = () => {
-      console.log("Listening...");
-      setListening(true);
-    };
-  
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      console.log("Transcript:", transcript);
-      setChatInput(transcript);
-      handleChatSend({ preventDefault: () => {} });
-    };
-  
-    recognition.onerror = (event) => {
-      console.error("Speech recognition error:", event.error);
-    };
-  
-    recognition.onend = () => {
-      console.log("Speech recognition ended.");
-      setListening(false);
-    };
-  
-    recognition.start();
-  };  
-
-  let currentAudio = null;
-
-  const handleSpeak = async (text) => {
-    try {
-      const response = await fetch('http://localhost:8000/speak', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text }),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to generate speech');
-      }
-  
-      const audioData = await response.arrayBuffer();
-      console.log('Audio buffer size:', audioData.byteLength);
-  
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
-
-  
-      const decodedAudio = await new Promise((resolve, reject) => {
-        audioContext.decodeAudioData(audioData, resolve, reject);
-      });
-  
-      const source = audioContext.createBufferSource();
-      source.buffer = decodedAudio;
-      source.connect(audioContext.destination);
-      source.start(0);
-    } catch (error) {
-      console.error('Error playing speech:', error);
-    }
-  };
- 
   useEffect(() => {
     async function loadSuggestions() {
       setLoading(true);
@@ -160,6 +114,53 @@ export default function LearnPage() {
       setChatResponse('Error getting response.');
     }
     setChatLoading(false);
+  };
+
+  const handleSpeak = async (text) => {
+    try {
+      const response = await fetch('http://localhost:8000/speak', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate speech');
+      }
+
+      const audioData = await response.arrayBuffer();
+
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
+
+      const decodedAudio = await new Promise((resolve, reject) => {
+        audioContext.decodeAudioData(audioData, resolve, reject);
+      });
+
+      const source = audioContext.createBufferSource();
+      source.buffer = decodedAudio;
+      source.connect(audioContext.destination);
+      source.start(0);
+    } catch (error) {
+      console.error('Error playing speech:', error);
+    }
+  };
+
+  const handleSpeechRecognition = () => {
+    if (!recognition) {
+      alert("Speech recognition is not supported in this browser.");
+      return;
+    }
+
+    recognition.lang = language === "french" ? "fr-FR"
+      : language === "spanish" ? "es-ES"
+      : language === "norwegian" ? "nb-NO"
+      : language === "mandarin" ? "zh-CN"
+      : "en-US";
+
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.start();
   };
 
   return (
@@ -323,6 +324,7 @@ export default function LearnPage() {
 
         </div>
       ) : null}
+      <LiveConversation />
     </div>
   );
 }
