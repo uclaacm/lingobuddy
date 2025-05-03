@@ -18,15 +18,15 @@ export default function Profile() {
     const [username, setUsername] = useState('');
     const [languages, setLanguages] = useState([]);
     const [selectedLanguage, setSelectedLanguage] = useState('');
-    const [selectedLevel, setSelectedLevel] = useState('');
+    const [selectedLesson, setSelectedLesson] = useState('');
     const [addLanguage, setAddLanguage] = useState('');
 
-    const levels = ["Basic", "Intermediate", "Advanced"];
+    const lessons = ["1: Alphabet", "2: Greetings", "3: Ordering at a restaurant"];
 
     async function handleGoClick () {
         const languageSlug = selectedLanguage.toLowerCase();
-        const levelSlug = selectedLevel.toLowerCase();    
-        router.push(`lessons/${languageSlug}/${levelSlug}`);
+        const lessonSlug = selectedLesson.toLowerCase();    
+        router.push(`lessons/${languageSlug}/${lessonSlug}`);
       }
     
     useEffect(() => {
@@ -83,23 +83,23 @@ export default function Profile() {
           ))}
         </div>
 
-          {/* Level Selection */}
-        <div className="level-selection">
-          {levels.map((level) => (
+          {/* Lesson Selection */}
+        <div className="lesson-selection">
+          {lessons.map((lesson) => (
             <button
-              key={level}
-              onClick={() => setSelectedLevel(level)}
-              className={`level-button ${selectedLevel === level ? "selected" : ""}`}
+              key={lesson}
+              onClick={() => setSelectedLesson(lesson)}
+              className={`lesson-button ${selectedLesson === lesson ? "selected" : ""}`}
             >
-              <span className="button-text">{level}</span>
+              <span className="button-text">{lesson}</span>
             </button>
           ))}
         </div>
 
         {/* Go Button */}
         <button
-          disabled={!selectedLanguage || !selectedLevel}
-          className={`go-button ${selectedLanguage && selectedLevel ? "enabled" : "disabled"}`}
+          disabled={!selectedLanguage || !selectedLesson}
+          className={`go-button ${selectedLanguage && selectedLesson ? "enabled" : "disabled"}`}
           onClick={handleGoClick}
         >
           Go!
