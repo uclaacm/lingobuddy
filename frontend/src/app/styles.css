@@ -42,14 +42,14 @@
 }
 
 .language-selection,
-.level-selection {
+.lesson-selection {
   display: flex;
   gap: 15px;
   margin-bottom: 3vh;
 }
 
 .language-button,
-.level-button {
+.lesson-button {
   padding: 15px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -62,12 +62,12 @@
 }
 
 .language-button:hover,
-.level-button:hover {
+.lesson-button:hover {
   background-color: #a3c7e030;
 }
 
 .language-button.selected,
-.level-button.selected {
+.lesson-button.selected {
   background-color: #a3c7e091;
   border-color: #999;
 }
