@@ -1,5 +1,8 @@
 # LingoBuddy
- 
+
+- **Frontend:** https://lingobuddy-iota.vercel.app
+- **Backend:** https://lingobuddy-7rp5.onrender.com
+
 ## Table of Contents
 - [Project Members](#project-members)
 - [Project Description](#project-description)
