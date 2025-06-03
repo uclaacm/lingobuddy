@@ -62,7 +62,7 @@ function LiveConversation() {
           formData.append('file', audioBlob, 'recording.webm');
 
           try {
-            const response = await fetch('http://localhost:8000/chat', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat`, {
               method: 'POST',
               body: formData,
             });
