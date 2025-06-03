@@ -45,12 +45,13 @@ npm install
 4. Add your keys for the database and Gemini API
 ```
 // frontend/.env.local
-NEXT_PUBLIC_SUPABASE_URL = 
-NEXT_PUBLIC_SUPABASE_ANON_KEY = 
+NEXT_PUBLIC_SUPABASE_URL =
+NEXT_PUBLIC_SUPABASE_ANON_KEY =
 NEXT_PUBLIC_GEMINI_API_KEY =
 
 // /backend/.env
-GEMINI_API_KEY = 
+GEMINI_API_KEY =
+OPENAI_API_KEY =
 ```
 
 6. Change directory to the backend directory
